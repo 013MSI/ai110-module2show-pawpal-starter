@@ -55,6 +55,25 @@ def test_recurring_task_creates_next_occurrence_on_completion():
     assert pending[0].deadline == today + timedelta(days=1)
 
 
+def test_tasks_sorted_returns_chronological_order():
+    """Sorting correctness: higher-priority / earlier-deadline tasks come first."""
+    owner = Owner(name="Jordan", available_hours=8.0)
+    pet = Pet(name="Mochi", species="dog")
+    owner.add_pet(pet)
+
+    today = date.today()
+    pet.add_task(Task(title="Low later", task_type="groom", duration_minutes=20, priority="low", deadline=today + timedelta(days=5)))
+    pet.add_task(Task(title="High soon", task_type="walk", duration_minutes=30, priority="high", deadline=today))
+    pet.add_task(Task(title="Med mid", task_type="feed", duration_minutes=15, priority="medium", deadline=today + timedelta(days=2)))
+
+    scheduler = Scheduler(owner=owner)
+    sorted_tasks = scheduler.get_tasks_sorted()
+
+    titles = [t.title for t in sorted_tasks]
+    assert titles.index("High soon") < titles.index("Med mid")
+    assert titles.index("Med mid") < titles.index("Low later")
+
+
 def test_scheduler_detects_conflict_between_overlapping_scheduled_tasks():
     owner = Owner(name="Jordan", available_hours=4.0)
     pet1 = Pet(name="Mochi", species="dog")
