@@ -156,9 +156,3 @@ Tests cover:
 - `Scheduler` knapsack-based task selection (high-priority task chosen within capacity)
 - Recurring task generation (`daily` task creates next occurrence with `deadline + 1 day`)
 - Conflict detection (two tasks at the same start time produce a warning message)
-
-### Confidence Level
-
-Reliability rating: ★★★★☆ (4/5)
-
-All tests pass. Core scheduling behaviors — selection, sorting, recurrence, and conflict detection — are verified. Additional edge cases (zero-duration tasks, invalid priority strings, very large task lists) are identified for future iterations.
